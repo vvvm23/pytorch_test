@@ -34,14 +34,17 @@ correct = 0
 total = 0
 
 inputs, labels = torch.load("processed/test.pt") # Load training data
-torch.stack([inputs], dim=1, out=inputs) # Explode 2D image to 3D for conv layers
+torch.stack([inputs], dim=1, out=inputs) # Explode 2D image to 3D for conv layers (Clean up exploding later)
 inputs = inputs.type('torch.FloatTensor')
 
+# TODO: Parallelise evaluation
 with torch.no_grad():
     for _ in tqdm(range(len(inputs))):
-        input = torch.stack([inputs[_]], dim=1, out=inputs[_])
+        input = torch.stack([inputs[_]], dim=1, out=inputs[_]) # Clean this up later
         output = cnn.forward(input)
         prediction = torch.argmax(output)
+        # To do, have current evaluation in description of progress bar
+        #tqdm.set_description("Prediction %s . Actual %s" % (prediction, labels[_]))
         if prediction == labels[_]:
             correct += 1
         total += 1
