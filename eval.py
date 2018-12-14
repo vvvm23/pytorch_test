@@ -50,3 +50,21 @@ with torch.no_grad():
         total += 1
 
 print("Evaluation complete. Network accuracy:", correct/total * 100, "%")
+
+for _ in range(100):
+    plt_input = torch.stack([inputs[_]], dim=1, out=inputs[_])
+
+    plt_prediction = torch.argmax(cnn(plt_input))
+
+    plt_input = plt_input.view((28, 28))
+
+    plt.subplot(10, 10, _+1)
+    plt.xticks([])
+    plt.yticks([])
+    plt.title(str(plt_prediction), fontsize=6)
+    plt.imshow(plt_input, cmap='gray')
+
+plt.axis('off')
+plt.tight_layout()
+plt.show()
+
